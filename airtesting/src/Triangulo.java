@@ -1,4 +1,4 @@
-package exemplo;
+
 public class Triangulo {
 
 	/*teste de commit*/
