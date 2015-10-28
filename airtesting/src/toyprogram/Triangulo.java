@@ -1,3 +1,4 @@
+package toyprogram;
 
 public class Triangulo {
 

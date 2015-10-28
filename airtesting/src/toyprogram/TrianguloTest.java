@@ -1,3 +1,4 @@
+package toyprogram;
 
 
 import static org.junit.Assert.*;
