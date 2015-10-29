@@ -1,0 +1,8 @@
+NOTE ON LICENSES OF THE FILES IN THIS DIRECTORY
+
+Files in this directory comprise libraries made available by third-party suppliers under specific licenses which permit their distribution along with Jabuti software.
+
+The licenses of each library can be found within the respective compressed file (the "jar" file).  For convenience, copies of the license are also provided within the directory third-party-library-licenses.
+
+
+

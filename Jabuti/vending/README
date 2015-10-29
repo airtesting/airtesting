@@ -1,0 +1,11 @@
+To compile:
+
+$ ant
+
+To test:
+
+$ ant test
+
+To build jar:
+
+$ ant jar

@@ -1,0 +1,96 @@
+<!-- Ant build script for Jabuti
+
+    Copyright 2003  Auri Marcelo Rizzo Vicenzi, Marcio Eduardo Delamaro, 			    Jose Carlos Maldonado
+
+    This file is part of Jabuti.
+
+    Jabuti is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as 
+    published by the Free Software Foundation, either version 3 of the      
+    License, or (at your option) any later version.
+
+    Jabuti is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with Jabuti.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+
+<project name="Jabuti" basedir="." default="main">
+
+<!-- Jabuti is currently targeted to JVM 1.5 -->
+<property name="ant.build.javac.source" value="1.5"/>
+<property name="ant.build.javac.target" value="1.5"/>       
+<property name="ant.build.javac.encoding" value="ISO-8859-1"/>
+	
+<property name="src.dir"	value="src"/>
+<property name="build.dir"	value="build"/>
+<property name="lib.dir"	value="lib"/>
+<property name="classes.dir"    value="${build.dir}/classes"/>
+<property name="jar.dir"	value="${build.dir}/jar"/>
+<property name="jar.file"	value="jabuti.jar"/>
+<property name="main-class"	value="br.jabuti.gui.JabutiGUI"/>
+<property name="doc.dir"	value="doc"/>
+	        
+<path id="classpath">
+  <fileset dir="${lib.dir}" includes="**/*.jar"/>
+</path>
+
+<!-- Clean all the generated -->
+
+<target name="clean">
+  <delete dir="${build.dir}"/>
+</target>
+
+<!-- Build the software -->
+
+<target name="compile">
+  <mkdir dir="${classes.dir}"/>
+  <javac encoding="${ant.build.javac.encoding}"
+         source="${ant.build.javac.source}"
+         target="${ant.build.javac.target}" 
+  	     srcdir="${src.dir}" 
+  	     destdir="${classes.dir}" 
+         classpathref="classpath"
+         debug="on" 
+         debuglevel="lines,vars,source"/>
+</target>
+
+<!-- Create the jar file -->
+
+<target name="jar" depends="compile">
+  <mkdir dir="${jar.dir}"/>
+  <jar destfile="${jar.dir}/${jar.file}" basedir="${classes.dir}">
+	<zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
+	<fileset dir="${src.dir}" includes="**/*.png,**/*.gif" />
+	<fileset dir="." includes="**/LICENSE.TXT,**/LGPL.TXT" />
+    <manifest>
+      <attribute name="Main-Class" value="${main-class}"/>
+    </manifest>
+  </jar>
+</target>
+
+<!-- Run the software -->
+
+<target name="run" depends="jar">
+  <java fork="true" classname="${main-class}">
+  <classpath>
+       <path refid="classpath"/>
+       <path location="${jar.dir}/jabuti.jar"/>
+  </classpath>
+  </java>
+</target>
+
+<!-- Clean up everything and rebuild the software -->
+
+<target name="clean-build" depends="clean,jar"/>
+
+<!-- The default action -->
+
+<target name="main" depends="clean,run"/>
+
+</project>

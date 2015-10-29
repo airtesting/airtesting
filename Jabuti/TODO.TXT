@@ -1,0 +1,6 @@
+TODO
+
+- Fix the script to import test cases from JUnit
+- Fix the script to update the coverage after a new .trc has been generated
+
+

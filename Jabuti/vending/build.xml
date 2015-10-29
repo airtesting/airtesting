@@ -1,0 +1,109 @@
+<!-- Ant build script for Jabuti
+
+    Copyright 2003  Auri Marcelo Rizzo Vicenzi, Marcio Eduardo Delamaro, 			    Jose Carlos Maldonado
+
+    This file is part of Jabuti.
+
+    Jabuti is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as 
+    published by the Free Software Foundation, either version 3 of the      
+    License, or (at your option) any later version.
+
+    Jabuti is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with Jabuti.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<project name="vending" basedir="." default="main">
+
+<!-- Jabuti is currently targeted to JVM 1.5 -->
+<property name="ant.build.javac.source" value="1.5"/>
+<property name="ant.build.javac.target" value="1.5"/>       
+<property name="ant.build.javac.encoding" value="ISO-8859-1"/>
+	
+<property name="src.dir"	value="src"/>
+<property name="test.dir"	value="test"/>
+<property name="lib.dir"	value="lib"/>
+<property name="build.dir"	value="build"/>
+<property name="build.classes.dir" value="${build.dir}/classes"/>
+<property name="build.test.dir"    value="${build.dir}/test"/>
+<property name="jar.dir"	value="${build.dir}/jar"/>
+<property name="jar.file"	value="vending.jar"/>
+
+
+<path id="classpath">
+	<fileset dir="${lib.dir}" includes="**/*.jar"/>
+</path>
+
+<path id="classpath.test">
+	<fileset dir="${lib.dir}" includes="**/*.jar"/>
+	<path location="${build.classes.dir}"/>
+	<path location="${build.test.dir}"/>
+</path>
+
+<!-- Clean all the generated -->
+<target name="clean">
+  <delete dir="${build.dir}"/>
+</target>
+
+<!-- Build the software -->
+<target name="compile">
+  <mkdir dir="${build.classes.dir}"/>
+  <javac encoding="${ant.build.javac.encoding}"
+         source="${ant.build.javac.source}"
+         target="${ant.build.javac.target}" 
+  	     srcdir="${src.dir}" 
+  	     destdir="${build.classes.dir}" 
+  	     classpathref="classpath" />
+</target>
+
+<!-- Create the jar file -->
+<target name="jar" depends="compile">
+  <mkdir dir="${jar.dir}"/>
+  <jar destfile="${jar.dir}/${jar.file}" basedir="${build.classes.dir}">
+	<fileset dir="${src.dir}" includes="**/*.png,**/*.gif" />
+	<fileset dir="." includes="**/LICENSE.TXT,**/LGPL.TXT" />
+  </jar>
+</target>
+
+<!-- Test the software -->
+
+<target name="test-compile" depends="compile">
+  <mkdir dir="${build.test.dir}"/>
+  <javac encoding="${ant.build.javac.encoding}"
+         source="${ant.build.javac.source}"
+         target="${ant.build.javac.target}" 
+  	     srcdir="${test.dir}" 
+  	     destdir="${build.test.dir}" 
+  	     classpathref="classpath.test" />
+</target>
+
+<target name="test" depends="test-compile">
+  <junit printsummary="true" showoutput="true" fork="no" haltonfailure="false">
+   <classpath>
+     <path refid="classpath.test"/>
+     <path location="."/>
+   </classpath>
+
+   <formatter type="plain" usefile="false" />
+   <batchtest fork="yes">
+     <fileset dir="${test.dir}">
+       <include name="**/*Test*.java"/>
+     </fileset>
+   </batchtest>
+</junit>
+</target>
+
+<!-- Clean up everything and rebuild the software -->
+
+<target name="clean-build" depends="clean,jar"/>
+
+<!-- The default action -->
+
+<target name="main" depends="clean,jar"/>
+
+</project>

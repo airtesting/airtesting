@@ -1,0 +1,36 @@
+#!/bin/tcsh -f
+set DIR = `pwd`
+set ZIPFILE  = "$DIR/Jabuti-bin.zip"
+rm -rf $ZIPFILE
+cd bin
+find . -name "*.class" -print | zip $ZIPFILE -@
+find . -name "*.gif" -print | zip $ZIPFILE -@
+find . -name "*.png" -print | zip $ZIPFILE -@
+#cd ../../jabuti-device/.eclipseme.tmp/verified/classes
+#find br -name "*.class" -print | zip $ZIPFILE -@
+
+cd $DIR/lib
+foreach x ( `ls *.jar `)
+   rm -rf xxx
+   mkdir xxx
+   cd xxx
+   echo "Unziping $x"
+   unzip ../$x >/dev/null
+   echo "Adding $x"
+   find . -name "*" -print | zip $ZIPFILE -@ >/dev/null
+   cd ..
+   rm -rf xxx
+end
+
+cd $DIR/../jabuti-device/deployed
+foreach x ( `ls *.jar `)
+   rm -rf xxx
+   mkdir xxx
+   cd xxx
+   echo "Unziping $x"
+   unzip ../$x >/dev/null
+   echo "Adding $x"
+   find br -name "*.class" -print | zip $ZIPFILE -@ >/dev/null
+   cd ..
+   rm -rf xxx
+end
