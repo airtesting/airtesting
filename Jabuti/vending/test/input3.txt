@@ -1,3 +1,0 @@
-insertCoin
-insertCoin
-vendItem 25
