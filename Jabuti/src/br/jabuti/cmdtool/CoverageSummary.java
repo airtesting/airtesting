@@ -15,7 +15,6 @@
     You should have received a copy of the GNU Lesser General Public License
     along with Jabuti.  If not, see <http://www.gnu.org/licenses/>.
 */
-//just a test
 
 package br.jabuti.cmdtool;
 
